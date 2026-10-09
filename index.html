@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e87524">
+<title>Trạm Bánh Mì – Tính nhanh</title>
+<style>
+:root{--orange:#e87524;--ink:#202124;--muted:#687078;--bg:#f5f6f7;--card:#fff;--line:#e6e8eb;--green:#137547;--red:#b42318}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+header{background:var(--orange);color:white;padding:22px 18px 20px;border-radius:0 0 22px 22px}
+header .eyebrow{font-size:12px;letter-spacing:1.2px;font-weight:700;opacity:.9}
+h1{font-size:25px;line-height:1.15;margin:7px 0}
+header p{margin:0;font-size:14px;opacity:.95}
+main{max-width:620px;margin:0 auto;padding:15px 14px 28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin-bottom:13px;box-shadow:0 3px 12px rgba(0,0,0,.035)}
+.card h2{font-size:16px;margin:0 0 15px}
+.field{margin:0 0 19px}
+.field:last-child{margin-bottom:0}
+.labelrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+label{font-size:14px;font-weight:650}
+.value{font-size:17px;font-weight:750;white-space:nowrap;color:#a84b0d}
+input[type=range]{width:100%;accent-color:var(--orange);height:28px;margin:0}
+.scale{display:flex;justify-content:space-between;color:var(--muted);font-size:11px;margin-top:0}
+.segment{display:flex;gap:8px}
+.segment button{flex:1;padding:11px 8px;border:1px solid var(--line);background:#fff;border-radius:11px;font-size:14px;font-weight:650;color:var(--ink)}
+.segment button.active{border-color:var(--orange);background:#fff2e8;color:#a84b0d}
+.results{background:#fff8f2;border:1px solid #f5d7c1}
+.resultline{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid #f0dfd2}
+.resultline:last-child{border-bottom:0}
+.resultline span{font-size:13px;color:#5c6268}
+.resultline strong{font-size:15px;text-align:right}
+.profitlabel{font-size:12px;letter-spacing:.6px;font-weight:800;color:#7a4a2a;margin-bottom:5px}
+.profit{font-size:29px;font-weight:850;letter-spacing:-.7px;overflow-wrap:anywhere}
+.profit.positive{color:var(--green)}.profit.negative{color:var(--red)}
+.break-even{margin-top:13px;padding-top:12px;border-top:1px solid #f0dfd2;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.break-even span{font-size:13px;color:#5c6268}
+.break-even strong{text-align:right}
+.note{font-size:12px;color:var(--muted);line-height:1.5;margin:10px 2px 0}
+.reset{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;font-size:14px;font-weight:700;color:var(--ink)}
+footer{text-align:center;color:#7a8086;font-size:11px;padding:4px 18px 24px}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">TRẠM BÁNH MÌ</div>
+  <h1>Máy tính lợi nhuận</h1>
+  <p>Kéo thanh để tính nhanh hiệu quả cửa hàng</p>
+</header>
+<main>
+  <section class="card">
+    <h2>Điều chỉnh số liệu</h2>
+    <div class="field">
+      <div class="labelrow"><label for="revenue">Doanh thu mỗi ngày</label><span class="value" id="revenueValue">2.000.000 đ</span></div>
+      <input id="revenue" type="range" min="500000" max="5000000" step="100000" value="2000000">
+      <div class="scale"><span>500 nghìn</span><span>2,5 triệu</span><span>5 triệu</span></div>
+    </div>
+    <div class="field">
+      <div class="labelrow"><label for="margin">Biên lợi nhuận sau giá vốn</label><span class="value" id="marginValue">38%</span></div>
+      <input id="margin" type="range" min="20" max="50" step="1" value="38">
+      <div class="scale"><span>20%</span><span>35%</span><span>50%</span></div>
+    </div>
+    <div class="field">
+      <div class="labelrow"><label for="cost">Chi phí cố định mỗi tháng</label><span class="value" id="costValue">19.000.000 đ</span></div>
+      <input id="cost" type="range" min="10000000" max="30000000" step="500000" value="19000000">
+      <div class="scale"><span>10 triệu</span><span>20 triệu</span><span>30 triệu</span></div>
+    </div>
+    <div class="field">
+      <label style="display:block;margin-bottom:9px">Ngày hoạt động mỗi tháng</label>
+      <div class="segment">
+        <button type="button" data-days="26">26 ngày</button>
+        <button type="button" data-days="30" class="active">30 ngày</button>
+      </div>
+    </div>
+  </section>
+  <section class="card results">
+    <div class="resultline"><span>Doanh thu tháng</span><strong id="monthlyRevenue">60.000.000 đ</strong></div>
+    <div class="resultline"><span>Lãi sau giá vốn</span><strong id="grossProfit">22.800.000 đ</strong></div>
+    <div style="padding:15px 0 2px">
+      <div class="profitlabel">LỢI NHUẬN ƯỚC TÍNH / THÁNG</div>
+      <div class="profit positive" id="netProfit">3.800.000 đ</div>
+    </div>
+    <div class="break-even"><span>Doanh thu hòa vốn/ngày</span><strong id="breakEven">1.666.667 đ</strong></div>
+    <p class="note">Ước tính = doanh thu × biên lợi nhuận − chi phí cố định. Chưa tính thuế, khấu hao, phí HUB/giao hàng hoặc chi phí khác nếu chưa nằm trong khoản chi phí cố định.</p>
+  </section>
+  <button class="reset" id="reset" type="button">Đặt lại số liệu ban đầu</button>
+</main>
+<footer>Công cụ tính nhanh tham khảo • Kiểm tra bằng số liệu thực tế trước khi ra quyết định.</footer>
+<script>
+const $=id=>document.getElementById(id);
+let days=30;
+const money=n=>Math.round(n).toLocaleString('vi-VN')+' đ';
+function update(){
+ const revenue=Number($('revenue').value), margin=Number($('margin').value)/100, cost=Number($('cost').value);
+ const monthly=revenue*days, gross=monthly*margin, net=gross-cost, be=margin>0?cost/margin/days:0;
+ $('revenueValue').textContent=money(revenue);
+ $('marginValue').textContent=Math.round(margin*100)+'%';
+ $('costValue').textContent=money(cost);
+ $('monthlyRevenue').textContent=money(monthly);
+ $('grossProfit').textContent=money(gross);
+ $('netProfit').textContent=money(net);
+ $('netProfit').className='profit '+(net>=0?'positive':'negative');
+ $('breakEven').textContent=money(be);
+}
+document.querySelectorAll('[data-days]').forEach(btn=>btn.addEventListener('click',()=>{
+ days=Number(btn.dataset.days);
+ document.querySelectorAll('[data-days]').forEach(b=>b.classList.toggle('active',b===btn));
+ update();
+}));
+['revenue','margin','cost'].forEach(id=>$(id).addEventListener('input',update));
+$('reset').addEventListener('click',()=>{
+ $('revenue').value=2000000;$('margin').value=38;$('cost').value=19000000;days=30;
+ document.querySelectorAll('[data-days]').forEach(b=>b.classList.toggle('active',b.dataset.days==='30'));update();
+});
+update();
+</script>
+</body>
+</html>
