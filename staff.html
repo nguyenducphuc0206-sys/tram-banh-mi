@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#e87524">
+<title>Trạm Bánh Mì — Nhân sự</title>
+<style>
+:root{--orange:#e87524;--ink:#202124;--muted:#687078;--bg:#f5f6f7;--card:#fff;--line:#e4e7eb;--green:#168451;--red:#c23b3b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:linear-gradient(120deg,#e87524,#f59a43);color:#fff;padding:22px 18px 25px}
+.wrap{max-width:960px;margin:auto}header .eyebrow{font-size:12px;letter-spacing:1.5px;font-weight:800;opacity:.9}h1{font-size:26px;margin:5px 0}header p{margin:0;opacity:.95;font-size:14px}
+main{max-width:960px;margin:16px auto;padding:0 14px 40px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+select,input,button{font:inherit}select,input{border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fff;max-width:100%;min-width:0}
+button{border:0;border-radius:11px;padding:11px 14px;font-weight:700;cursor:pointer}.primary{background:var(--orange);color:white}.secondary{background:#fff;border:1px solid var(--line);color:var(--ink)}.success{background:#e4f5eb;color:#126b40}.danger{background:#fde9e9;color:#a52c2c}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:17px;box-shadow:0 2px 8px #17202a08;min-width:0}.card h2{font-size:17px;margin:0 0 12px}.sub{font-size:13px;color:var(--muted)}.stat{font-size:25px;font-weight:800;margin-top:5px}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}.statbox{padding:14px;background:#fff;border:1px solid var(--line);border-radius:14px}.pill{display:inline-block;padding:4px 9px;border-radius:99px;background:#fff1e6;color:#a64d0b;font-size:12px;font-weight:800}.pill.green{background:#e4f5eb;color:#126b40}.pill.red{background:#fde9e9;color:#a52c2c}
+label{display:block;font-size:13px;font-weight:700;margin:10px 0 5px}.field{width:100%}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.list{display:flex;flex-direction:column;gap:9px}.item{border:1px solid var(--line);border-radius:13px;padding:12px}.itemtop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.item strong{display:block}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.actions button{font-size:13px;padding:8px 10px}.empty{color:var(--muted);padding:15px 0;font-size:14px}.notice{border-radius:12px;background:#fff5e9;border:1px solid #f4d3b4;padding:12px;font-size:13px;line-height:1.5;margin-bottom:14px}.full{grid-column:1/-1}.hidden{display:none!important}footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr 1fr}.statbox{padding:10px}.stat{font-size:20px}header{padding:19px 15px}h1{font-size:23px}.card{padding:14px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="eyebrow">TRẠM BÁNH MÌ · TBM</div><h1>Quản lý ca & chấm công</h1><p>Đăng ký ca · Duyệt lịch · Chấm công tại cửa hàng</p></div></header>
+<main>
+<div class="notice"><b>Bản demo giao diện:</b> dữ liệu lưu trên trình duyệt của thiết bị này. Chấm công QR/GPS và phân quyền chưa phải hệ thống bảo mật thực tế; cần máy chủ và tài khoản thật trước khi sử dụng chính thức.</div>
+<div class="toolbar">
+<label for="role" style="margin:0">Chế độ</label>
+<select id="role" aria-label="Chế độ xem"><option value="staff">Nhân viên</option><option value="manager">Quản lý cửa hàng</option></select>
+<select id="employee" aria-label="Nhân viên"><option>Nguyễn An</option><option>Trần Bình</option><option>Lê Chi</option></select>
+<button class="secondary" id="reset">Đặt lại dữ liệu demo</button>
+</div>
+<div class="stats">
+<div class="statbox"><div class="sub">Ca chờ duyệt</div><div class="stat" id="pendingCount">0</div></div>
+<div class="statbox"><div class="sub">Ca đã duyệt</div><div class="stat" id="approvedCount">0</div></div>
+<div class="statbox"><div class="sub">Lượt chấm công</div><div class="stat" id="attendanceCount">0</div></div>
+</div>
+<div class="grid">
+<section class="card" id="requestCard">
+<h2>Đăng ký ca làm</h2>
+<div class="sub">Chọn ngày, khung giờ rồi gửi quản lý duyệt.</div>
+<label for="shiftDate">Ngày làm</label><input class="field" id="shiftDate" type="date">
+<label for="shiftTime">Khung giờ</label><select class="field" id="shiftTime"><option value="05:00–12:00">Ca sáng · 05:00–12:00</option><option value="15:00–21:00">Ca chiều · 15:00–21:00</option><option value="08:00–14:00">Ca giữa · 08:00–14:00</option></select>
+<label for="store">Cửa hàng</label><select class="field" id="store"><option>TBM — Cửa hàng 01</option><option>TBM — Cửa hàng 02</option><option>TBM — Cửa hàng 03</option></select>
+<div class="actions"><button class="primary" id="requestShift">Gửi đăng ký ca</button></div>
+</section>
+<section class="card">
+<h2>Chấm công tại cửa hàng</h2>
+<div class="sub">Dùng thử luồng xác nhận vị trí. Cần cấp quyền vị trí cho trình duyệt.</div>
+<label for="storeCode">Mã QR cửa hàng (demo)</label><input class="field" id="storeCode" value="TBM-001" autocomplete="off">
+<div class="actions"><button class="primary" id="clockIn">Chấm công vào</button><button class="secondary" id="clockOut">Chấm công ra</button></div>
+<div id="geoResult" class="sub" style="margin-top:10px">Chưa chấm công.</div>
+</section>
+<section class="card full">
+<div class="itemtop"><div><h2 style="margin-bottom:4px">Lịch ca của nhân viên</h2><div class="sub">Danh sách đăng ký và trạng thái duyệt.</div></div><span class="pill" id="listLabel">Nhân viên</span></div>
+<div class="list" id="shiftList"></div>
+</section>
+<section class="card full hidden" id="managerCard">
+<h2>Duyệt đăng ký ca</h2><div class="sub" style="margin-bottom:12px">Quản lý cửa hàng xem yêu cầu và phê duyệt hoặc từ chối.</div><div class="list" id="approvalList"></div>
+</section>
+<section class="card full">
+<h2>Lịch sử chấm công</h2><div class="list" id="attendanceList"></div>
+</section>
+</div>
+<footer>TBM · Bản thử nghiệm nội bộ · Chưa kết nối cơ sở dữ liệu trung tâm</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const today=new Date(); const localDate=new Date(today.getTime()-today.getTimezoneOffset()*60000).toISOString().slice(0,10); $('shiftDate').value=localDate;
+const initialShifts=[
+{id:1,employee:'Nguyễn An',date:localDate,time:'05:00–12:00',store:'TBM — Cửa hàng 01',status:'approved'},
+{id:2,employee:'Trần Bình',date:localDate,time:'15:00–21:00',store:'TBM — Cửa hàng 01',status:'pending'}
+];
+let shifts=JSON.parse(localStorage.getItem('tbm_demo_shifts')||'null')||initialShifts;
+let attendance=JSON.parse(localStorage.getItem('tbm_demo_attendance')||'[]');
+function save(){localStorage.setItem('tbm_demo_shifts',JSON.stringify(shifts));localStorage.setItem('tbm_demo_attendance',JSON.stringify(attendance));render()}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function statusTag(s){return s==='approved'?'<span class="pill green">Đã duyệt</span>':s==='rejected'?'<span class="pill red">Từ chối</span>':'<span class="pill">Chờ duyệt</span>'}
+function render(){
+ const role=$('role').value, emp=$('employee').value;
+ $('managerCard').classList.toggle('hidden',role!=='manager');
+ $('requestCard').classList.toggle('hidden',role==='manager');
+ $('listLabel').textContent=role==='manager'?'Quản lý · tất cả nhân viên':'Nhân viên · '+emp;
+ $('pendingCount').textContent=shifts.filter(s=>s.status==='pending').length;
+ $('approvedCount').textContent=shifts.filter(s=>s.status==='approved').length;
+ $('attendanceCount').textContent=attendance.length;
+ const visible=role==='manager'?shifts:shifts.filter(s=>s.employee===emp);
+ $('shiftList').innerHTML=visible.length?visible.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(s=>`<div class="item"><div class="itemtop"><div><strong>${escapeHtml(s.employee)}</strong><div class="sub">${escapeHtml(s.date)} · ${escapeHtml(s.time)}</div><div class="sub">${escapeHtml(s.store)}</div></div>${statusTag(s.status)}</div></div>`).join(''):'<div class="empty">Chưa có đăng ký ca.</div>';
+ const pending=shifts.filter(s=>s.status==='pending');
+ $('approvalList').innerHTML=pending.length?pending.map(s=>`<div class="item"><div class="itemtop"><div><strong>${escapeHtml(s.employee)}</strong><div class="sub">${escapeHtml(s.date)} · ${escapeHtml(s.time)}</div><div class="sub">${escapeHtml(s.store)}</div></div>${statusTag(s.status)}</div><div class="actions"><button class="success" onclick="approve(${s.id})">Duyệt ca</button><button class="danger" onclick="reject(${s.id})">Từ chối</button></div></div>`).join(''):'<div class="empty">Không có ca nào chờ duyệt.</div>';
+ $('attendanceList').innerHTML=attendance.length?attendance.slice().reverse().map(a=>`<div class="item"><div class="itemtop"><div><strong>${escapeHtml(a.employee)} · ${escapeHtml(a.kind==='in'?'Vào ca':'Ra ca')}</strong><div class="sub">${escapeHtml(a.time)}</div><div class="sub">${escapeHtml(a.store)} · ${escapeHtml(a.location)}</div></div><span class="pill green">Đã ghi demo</span></div></div>`).join(''):'<div class="empty">Chưa có lượt chấm công.</div>';
+}
+window.approve=id=>{shifts=shifts.map(s=>s.id===id?{...s,status:'approved'}:s);save()};
+window.reject=id=>{shifts=shifts.map(s=>s.id===id?{...s,status:'rejected'}:s);save()};
+$('role').addEventListener('change',render);$('employee').addEventListener('change',render);
+$('requestShift').addEventListener('click',()=>{
+ const date=$('shiftDate').value;if(!date){alert('Vui lòng chọn ngày làm.');return}
+ const emp=$('employee').value, time=$('shiftTime').value, store=$('store').value;
+ if(shifts.some(s=>s.employee===emp&&s.date===date&&s.time===time&&s.status!=='rejected')){alert('Bạn đã đăng ký khung giờ này rồi.');return}
+ shifts.push({id:Date.now(),employee:emp,date,time,store,status:'pending'});save();alert('Đã gửi đăng ký ca, chờ quản lý duyệt.');
+});
+function recordAttendance(kind){
+ const emp=$('employee').value, code=$('storeCode').value.trim();
+ if(code!=='TBM-001'){alert('Mã cửa hàng demo không hợp lệ.');return}
+ const approved=shifts.some(s=>s.employee===emp&&s.date===localDate&&s.status==='approved');
+ if(!approved){alert('Chưa có ca được quản lý duyệt hôm nay.');return}
+ const record=(location)=>{attendance.push({id:Date.now(),employee:emp,kind,time:new Date().toLocaleString('vi-VN'),store:'TBM — Cửa hàng 01',location});save();$('geoResult').textContent='Đã ghi nhận lượt '+(kind==='in'?'vào ca':'ra ca')+' (demo): '+location};
+ if(!navigator.geolocation){record('Không hỗ trợ GPS');return}
+ $('geoResult').textContent='Đang xin quyền vị trí…';
+ navigator.geolocation.getCurrentPosition(pos=>{
+  const loc=pos.coords.latitude.toFixed(5)+', '+pos.coords.longitude.toFixed(5);
+  // Demo only: this stores coordinates but does not validate against a configured store geofence.
+  record(loc+' · chưa xác thực bán kính cửa hàng');
+ },()=>{ $('geoResult').textContent='Không lấy được vị trí. Hãy cấp quyền vị trí cho trang web và thử lại.';alert('Cần cấp quyền vị trí để tiếp tục.');},{enableHighAccuracy:true,timeout:10000,maximumAge:0});
+}
+$('clockIn').addEventListener('click',()=>recordAttendance('in'));$('clockOut').addEventListener('click',()=>recordAttendance('out'));
+$('reset').addEventListener('click',()=>{if(confirm('Xóa dữ liệu demo trên trình duyệt này và khôi phục mẫu?')){shifts=initialShifts.map(s=>({...s}));attendance=[];save();$('geoResult').textContent='Đã đặt lại dữ liệu demo.'}});
+render();
+</script>
+</body>
+</html>

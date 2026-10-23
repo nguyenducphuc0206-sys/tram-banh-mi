@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f36c21">
+<title>Quản lý nhân sự | Trạm Bánh Mì</title>
+<style>
+:root{color-scheme:light;--orange:#ed6b22;--orange-dark:#a94312;--orange-pale:#fff0e6;--ink:#202521;--muted:#717873;--paper:#f6f5f1;--white:#fff;--line:#e8e6e0;--green:#237650;--green-pale:#e8f4ed;--red:#a94332;--red-pale:#fff0ed;--shadow:0 12px 34px rgba(42,35,27,.055)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Avenir Next",Avenir,"Segoe UI",sans-serif;font-size:14px;line-height:1.45}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.topbar{height:68px;background:var(--white);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(22px,calc((100vw - 1220px)/2));gap:18px}
+.brand{display:flex;align-items:center;gap:11px;color:inherit;text-decoration:none;font-weight:800}
+.brand-mark{width:36px;height:36px;display:grid;place-items:center;background:var(--orange);color:white;border-radius:11px;font-size:19px}
+.brand-name{font-size:14px;letter-spacing:.2px}.brand-name small{display:block;color:var(--muted);font-size:10px;font-weight:600;letter-spacing:.4px}
+.top-meta{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:12px}
+.status-dot{width:8px;height:8px;display:inline-block;border-radius:50%;background:#3c9b69;margin-right:6px}
+.avatar{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#f4d8c4;color:#8e451e;font-weight:800}
+.layout{max-width:1220px;margin:0 auto;padding:30px 22px 48px;display:grid;grid-template-columns:218px minmax(0,1fr);gap:38px}
+.sidebar{align-self:start;position:sticky;top:22px}
+.back-link{display:inline-block;margin:0 0 25px;color:var(--muted);text-decoration:none;font-size:12px;font-weight:650}
+.side-title{margin:0 0 12px 10px;color:#92958f;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.nav-list{display:grid;gap:5px}
+.nav-item{width:100%;display:flex;align-items:center;gap:11px;padding:11px 12px;border:0;border-radius:9px;background:transparent;color:#555d57;text-align:left;font-size:13px;font-weight:650}
+.nav-item:hover{background:#eeece6}.nav-item.active{background:var(--orange-pale);color:var(--orange-dark)}
+.nav-icon{width:22px;text-align:center;font-size:16px;line-height:1}
+.nav-count{margin-left:auto;min-width:21px;padding:2px 6px;border-radius:20px;background:#f3d3bf;color:var(--orange-dark);font-size:10px;text-align:center}
+.sidebar-note{margin-top:32px;padding:13px 12px;border-left:2px solid var(--orange);color:var(--muted);font-size:11px;line-height:1.55}
+.content{min-width:0}
+.page-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin:0 0 22px}
+.eyebrow{color:var(--orange-dark);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+h1{margin:5px 0 3px;font-size:27px;line-height:1.2;letter-spacing:0}
+.heading-sub{margin:0;color:var(--muted);font-size:13px}
+.date-chip{flex:none;padding:8px 11px;background:#fff;border:1px solid var(--line);border-radius:8px;color:#555d57;font-size:11px;font-weight:700}
+.overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:22px;border:1px solid var(--line);border-radius:10px;background:var(--white);box-shadow:var(--shadow)}
+.metric{padding:15px 17px;border-right:1px solid var(--line)}.metric:last-child{border:0}
+.metric-label{color:var(--muted);font-size:11px;font-weight:650}.metric-value{margin-top:5px;font-size:25px;line-height:1.1;font-weight:800}.metric-hint{margin-top:5px;color:#8a8e88;font-size:10px}
+.view{display:none}.view.active{display:block;animation:enter .2s ease-out}
+@keyframes enter{from{opacity:.55;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 13px}
+h2{margin:0;font-size:16px;line-height:1.3}
+.section-caption{margin:4px 0 0;color:var(--muted);font-size:11px}
+.panel{padding:19px;background:var(--white);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);margin-bottom:15px}
+.panel-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(270px,.8fr);gap:15px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:grid;gap:6px;min-width:0}.field.full{grid-column:1/-1}
+.field label{font-size:11px;font-weight:750;color:#4f5751}
+.field input,.field select{width:100%;min-width:0;height:42px;padding:0 11px;background:#fff;border:1px solid #deded8;border-radius:7px;color:var(--ink);outline:none}
+.field input:focus,.field select:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(237,107,34,.12)}
+.form-actions{display:flex;align-items:center;gap:10px;margin-top:17px}
+.button{min-height:39px;padding:0 14px;border:1px solid transparent;border-radius:7px;font-size:12px;font-weight:750}
+.button.primary{background:var(--orange);color:white}.button.primary:hover{background:#d85e18}
+.button.ghost{border-color:var(--line);background:white;color:#4b554e}.button.ghost:hover{background:#f8f7f3}
+.button.danger{border-color:#f0d0ca;background:white;color:var(--red)}
+.empty-note{margin:8px 0 0;color:var(--muted);font-size:10px}
+.info-panel{padding:19px;background:#292d28;color:white;border-radius:10px;min-height:100%;position:relative;overflow:hidden}
+.info-panel:after{content:"";position:absolute;width:145px;height:145px;border:1px solid rgba(255,255,255,.12);border-radius:50%;right:-72px;bottom:-77px}
+.info-panel .eyebrow{color:#ffc398}.info-panel h2{margin:7px 0 8px;font-size:18px}.info-panel p{max-width:270px;margin:0;color:#c4c9c2;font-size:12px;line-height:1.6}
+.info-rule{margin:17px 0 12px;border:0;border-top:1px solid rgba(255,255,255,.14)}
+.info-line{display:flex;justify-content:space-between;gap:10px;color:#d5dad4;font-size:11px}.info-line strong{color:white;font-weight:750}
+.shift-list{display:grid;gap:9px}
+.shift-row{display:grid;grid-template-columns:minmax(120px,1.15fr) minmax(115px,1fr) minmax(110px,.9fr) auto;align-items:center;gap:12px;padding:13px 14px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.person{display:flex;align-items:center;gap:10px;min-width:0}.person-avatar{flex:none;width:34px;height:34px;display:grid;place-items:center;background:#f7e5d8;border-radius:9px;color:#9e4d20;font-weight:800;font-size:11px}.person-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:750}.person-role{margin-top:2px;color:var(--muted);font-size:10px}
+.shift-time{font-size:11px;font-weight:700}.shift-date{margin-top:3px;color:var(--muted);font-size:10px}
+.badge{display:inline-flex;width:max-content;align-items:center;gap:5px;padding:4px 8px;border-radius:20px;font-size:10px;font-weight:750;white-space:nowrap}.badge.pending{background:#fff2df;color:#985415}.badge.approved,.badge.done{background:var(--green-pale);color:var(--green)}.badge.rejected{background:var(--red-pale);color:var(--red)}
+.row-actions{display:flex;gap:6px}.mini-button{min-height:32px;padding:0 9px;border:1px solid var(--line);border-radius:6px;background:white;color:#465048;font-size:10px;font-weight:750}.mini-button.approve{background:var(--green-pale);border-color:#d4e8db;color:var(--green)}.mini-button:hover{filter:brightness(.97)}
+.attendance-layout{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:15px;align-items:start}
+.scan-box{display:grid;place-items:center;min-height:180px;margin:14px 0 12px;padding:16px;border:1px dashed #d9d5cc;border-radius:8px;background:#faf9f6;text-align:center}
+.scan-mark{width:54px;height:54px;display:grid;place-items:center;margin-bottom:10px;border:1px solid #f2c4a5;border-radius:14px;background:var(--orange-pale);color:var(--orange-dark);font-size:24px}
+.scan-box strong{font-size:13px}.scan-box p{max-width:260px;margin:5px 0 0;color:var(--muted);font-size:10px}
+.scan-box video{width:min(100%,320px);max-height:200px;border-radius:7px;background:#171a17}
+.scan-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.code-input{flex:1 1 150px;min-width:0;height:39px;padding:0 10px;border:1px solid var(--line);border-radius:7px;font-size:11px}
+.location-line{display:flex;align-items:center;gap:9px;padding:12px 0;border-top:1px solid var(--line);font-size:11px}.location-icon{color:var(--orange);font-size:17px}.location-copy{flex:1;color:var(--muted)}.location-copy strong{display:block;color:var(--ink);font-size:11px}.location-copy span{font-size:10px}
+.step-state{width:20px;height:20px;display:grid;place-items:center;border:1px solid #d9d9d1;border-radius:50%;color:#939890;font-size:10px;font-weight:800}.step-state.done{border-color:#bedbc8;background:var(--green-pale);color:var(--green)}
+.attendance-submit{width:100%;margin-top:7px}.attendance-submit:disabled{background:#d4d4ce;color:#72766f;cursor:not-allowed}
+.qr-hint{padding:14px;border-radius:8px;background:var(--orange-pale)}.qr-hint .eyebrow{font-size:9px}.qr-hint code{display:block;margin:9px 0;color:#78350e;font-size:14px;font-weight:800;word-break:break-word}.qr-hint p{margin:0;color:#805c47;font-size:10px;line-height:1.5}.copy-code{margin-top:10px;padding:7px 9px;border:1px solid #edc5aa;border-radius:6px;background:#fffaf6;color:#813d17;font-size:10px;font-weight:750}
+.history-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.filter-select{height:36px;padding:0 9px;border:1px solid var(--line);border-radius:7px;background:white;font-size:11px}
+.history-list{display:grid;gap:8px}.history-row{display:grid;grid-template-columns:minmax(140px,1fr) minmax(130px,.8fr) minmax(90px,.7fr) auto;align-items:center;gap:10px;padding:12px 13px;border-bottom:1px solid #eeede8}.history-row:last-child{border-bottom:0}.history-date{font-size:11px;font-weight:750}.history-date span{display:block;margin-top:3px;color:var(--muted);font-size:10px;font-weight:500}.history-place{color:var(--muted);font-size:10px}
+.empty-state{padding:28px 14px;text-align:center;color:var(--muted);font-size:12px}
+.toast{position:fixed;left:50%;bottom:24px;z-index:5;transform:translate(-50%,12px);padding:11px 15px;border-radius:8px;background:#292d28;color:white;font-size:12px;font-weight:650;opacity:0;pointer-events:none;transition:.2s}.toast.show{transform:translate(-50%,0);opacity:1}
+.mobile-nav{display:none}
+@media(max-width:850px){.layout{grid-template-columns:190px minmax(0,1fr);gap:23px;padding:24px 18px}.panel-grid{grid-template-columns:1fr}.info-panel{min-height:auto}.attendance-layout{grid-template-columns:1fr}.qr-hint{order:-1}.shift-row{grid-template-columns:minmax(120px,1.1fr) minmax(105px,1fr) auto}.shift-row>.badge{grid-column:2}.shift-row .row-actions{grid-column:3;grid-row:1/3}}
+@media(max-width:620px){body{padding-bottom:74px}.topbar{height:59px;padding:0 15px}.brand-mark{width:33px;height:33px}.top-meta{gap:9px;font-size:10px}.layout{display:block;padding:23px 14px 25px}.sidebar{display:none}.page-heading{align-items:flex-start;margin-bottom:17px}.date-chip{font-size:10px;padding:7px 8px}.eyebrow{font-size:9px}h1{font-size:24px}.heading-sub{font-size:11px}.overview{margin-bottom:17px}.metric{padding:12px 10px}.metric-label{font-size:9px;line-height:1.3}.metric-value{font-size:22px}.metric-hint{font-size:9px}.panel{padding:15px;margin-bottom:12px}.section-head{align-items:flex-start}.section-head h2{font-size:15px}.field-grid{gap:12px}.field input,.field select{height:40px}.shift-row{grid-template-columns:minmax(0,1fr) auto;gap:8px 11px;padding:11px}.shift-row .person{grid-column:1}.shift-row>.shift-time{grid-column:1}.shift-row>.badge{grid-column:2;grid-row:1;justify-self:end}.shift-row .row-actions{grid-column:2;grid-row:2;justify-self:end}.shift-row>.shift-date{grid-column:1}.shift-time{font-size:10px}.row-actions .mini-button{padding:0 8px}.attendance-layout{gap:10px}.history-row{grid-template-columns:minmax(0,1fr) auto;gap:5px 10px}.history-row .history-date{grid-column:1}.history-row .history-place{grid-column:1}.history-row>.badge{grid-column:2;grid-row:1;justify-self:end}.history-row>.person{grid-column:1/-1}.history-toolbar{align-items:flex-start}.mobile-nav{position:fixed;inset:auto 0 0;z-index:4;display:grid;grid-template-columns:repeat(4,1fr);padding:7px 5px calc(7px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:rgba(255,255,255,.97);backdrop-filter:blur(12px)}.mobile-nav .nav-item{display:grid;justify-items:center;gap:3px;padding:5px 2px;border-radius:7px;font-size:9px}.mobile-nav .nav-icon{font-size:17px}.mobile-nav .nav-count{position:absolute;transform:translate(20px,-8px);min-width:16px;padding:1px 4px;font-size:8px}.toast{bottom:86px;max-width:calc(100% - 28px);text-align:center}}
+@media(max-width:360px){.top-meta .online-label{display:none}.overview{grid-template-columns:repeat(3,minmax(0,1fr))}.metric{padding:10px 7px}.metric-value{font-size:20px}.field-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Trạm Bánh Mì, về máy tính lợi nhuận">
+    <span class="brand-mark" aria-hidden="true">T</span>
+    <span class="brand-name">TRẠM BÁNH MÌ<small>VẬN HÀNH CỬA HÀNG</small></span>
+  </a>
+  <div class="top-meta"><span><i class="status-dot"></i><span class="online-label">Đang hoạt động</span></span><span class="avatar" aria-label="Quản lý">QL</span></div>
+</header>
+<div class="layout">
+  <aside class="sidebar">
+    <a class="back-link" href="index.html">← Máy tính lợi nhuận</a>
+    <p class="side-title">Nhân sự</p>
+    <nav class="nav-list" aria-label="Điều hướng quản lý nhân sự">
+      <button class="nav-item active" type="button" data-view="register"><span class="nav-icon" aria-hidden="true">＋</span>Đăng ký ca</button>
+      <button class="nav-item" type="button" data-view="approve"><span class="nav-icon" aria-hidden="true">✓</span>Duyệt ca <span class="nav-count" id="pendingCount">0</span></button>
+      <button class="nav-item" type="button" data-view="attendance"><span class="nav-icon" aria-hidden="true">⌖</span>Chấm công</button>
+      <button class="nav-item" type="button" data-view="history"><span class="nav-icon" aria-hidden="true">◷</span>Lịch sử</button>
+    </nav>
+    <div class="sidebar-note">Dữ liệu bản thử nghiệm được lưu trên thiết bị đang sử dụng.</div>
+  </aside>
+
+  <main class="content">
+    <div class="page-heading">
+      <div><div class="eyebrow">Trạm Bánh Mì / Vận hành</div><h1 id="pageTitle">Đăng ký ca làm</h1><p class="heading-sub" id="pageSubtitle">Sắp xếp ca làm linh hoạt cho đội ngũ cửa hàng.</p></div>
+      <div class="date-chip" id="todayLabel"></div>
+    </div>
+
+    <section class="overview" aria-label="Tổng quan nhân sự">
+      <div class="metric"><div class="metric-label">Chờ quản lý duyệt</div><div class="metric-value" id="pendingMetric">0</div><div class="metric-hint">đăng ký cần xử lý</div></div>
+      <div class="metric"><div class="metric-label">Ca đã xác nhận</div><div class="metric-value" id="approvedMetric">0</div><div class="metric-hint">đang có trong lịch</div></div>
+      <div class="metric"><div class="metric-label">Đã chấm công hôm nay</div><div class="metric-value" id="attendanceMetric">0</div><div class="metric-hint">lượt ghi nhận</div></div>
+    </section>
+
+    <section class="view active" id="view-register">
+      <div class="panel-grid">
+        <section class="panel">
+          <div class="section-head"><div><h2>Đăng ký ca mới</h2><p class="section-caption">Gửi lịch làm để quản lý xác nhận.</p></div></div>
+          <form id="shiftForm">
+            <div class="field-grid">
+              <div class="field full"><label for="employeeName">Tên nhân viên</label><input id="employeeName" name="employeeName" placeholder="Ví dụ: Nguyễn Minh Anh" autocomplete="name" required maxlength="60"></div>
+              <div class="field"><label for="shiftDate">Ngày làm</label><input id="shiftDate" name="shiftDate" type="date" required></div>
+              <div class="field"><label for="shiftRole">Vị trí</label><select id="shiftRole" name="shiftRole"><option>Phục vụ</option><option>Bếp</option><option>Thu ngân</option><option>Ca trưởng</option></select></div>
+              <div class="field"><label for="shiftStart">Bắt đầu</label><input id="shiftStart" name="shiftStart" type="time" value="07:00" required></div>
+              <div class="field"><label for="shiftEnd">Kết thúc</label><input id="shiftEnd" name="shiftEnd" type="time" value="13:00" required></div>
+            </div>
+            <div class="form-actions"><button class="button primary" type="submit">Gửi đăng ký ca <span aria-hidden="true">→</span></button></div>
+            <p class="empty-note">Ca sẽ ở trạng thái chờ duyệt cho đến khi quản lý xác nhận.</p>
+          </form>
+        </section>
+        <aside class="info-panel">
+          <div class="eyebrow">Lịch ca gần nhất</div><h2>Làm việc nhịp nhàng.</h2><p>Theo dõi lịch đã đăng ký và trạng thái xác nhận ngay tại đây.</p>
+          <hr class="info-rule">
+          <div class="info-line"><span>Đăng ký đang chờ</span><strong id="sidePending">0 ca</strong></div>
+          <div class="info-line" style="margin-top:9px"><span>Ca đã được duyệt</span><strong id="sideApproved">0 ca</strong></div>
+        </aside>
+      </div>
+      <section class="panel">
+        <div class="section-head"><div><h2>Lịch đăng ký gần đây</h2><p class="section-caption">Trạng thái mới nhất của các ca làm.</p></div></div>
+        <div class="shift-list" id="recentShifts"></div>
+      </section>
+    </section>
+
+    <section class="view" id="view-approve">
+      <section class="panel">
+        <div class="section-head"><div><h2>Yêu cầu đăng ký ca</h2><p class="section-caption">Duyệt hoặc từ chối lịch nhân viên gửi lên.</p></div></div>
+        <div class="shift-list" id="approvalList"></div>
+      </section>
+    </section>
+
+    <section class="view" id="view-attendance">
+      <div class="attendance-layout">
+        <section class="panel">
+          <div class="section-head"><div><h2>Chấm công tại cửa hàng</h2><p class="section-caption">Xác thực mã QR và vị trí trước khi ghi nhận.</p></div></div>
+          <div class="scan-box" id="scanBox"><div><div class="scan-mark" aria-hidden="true">⌗</div><strong id="qrStatus">Chưa xác thực mã QR</strong><p id="qrMessage">Quét mã QR tại cửa hàng hoặc nhập mã bên dưới.</p></div></div>
+          <div class="scan-controls"><button class="button primary" id="startScan" type="button">Mở camera quét QR</button><input class="code-input" id="qrInput" aria-label="Mã QR cửa hàng" placeholder="Nhập mã QR cửa hàng"><button class="button ghost" id="verifyCode" type="button">Xác nhận mã</button></div>
+          <p class="empty-note" id="cameraNote">Quét QR bằng camera cần trình duyệt hỗ trợ BarcodeDetector và quyền camera.</p>
+          <div style="height:15px"></div>
+          <div class="location-line"><span class="location-icon" aria-hidden="true">⌖</span><div class="location-copy"><strong id="gpsStatus">Chưa xác nhận vị trí</strong><span id="gpsMessage">Cần cho phép truy cập GPS của thiết bị.</span></div><span class="step-state" id="gpsStep">2</span></div>
+          <button class="button ghost" id="getLocation" type="button">Xác nhận vị trí GPS</button>
+          <button class="button primary attendance-submit" id="checkIn" type="button" disabled>Hoàn tất chấm công</button>
+        </section>
+        <aside class="panel">
+          <div class="section-head"><div><h2>Mã QR cửa hàng</h2><p class="section-caption">Mã dùng cho bản giao diện thử nghiệm.</p></div></div>
+          <div class="qr-hint"><div class="eyebrow">Mã nhận diện cửa hàng</div><code id="storeCode">TRAM-BM-CA-2026</code><p>Nhập mã này để thử luồng chấm công. Khi triển khai thật, mỗi cửa hàng cần mã QR riêng và xác thực vị trí theo tọa độ đã cấu hình.</p><button class="copy-code" id="copyCode" type="button">Sao chép mã</button></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="view" id="view-history">
+      <section class="panel">
+        <div class="history-toolbar"><div><h2>Lịch sử chấm công</h2><p class="section-caption">Các lượt ghi nhận trên thiết bị này.</p></div><select class="filter-select" id="historyFilter" aria-label="Lọc lịch sử"><option value="all">Tất cả lượt</option><option value="today">Hôm nay</option></select></div>
+        <div id="historyList"></div>
+      </section>
+    </section>
+  </main>
+</div>
+
+<nav class="mobile-nav" aria-label="Điều hướng nhân sự trên điện thoại">
+  <button class="nav-item active" type="button" data-view="register"><span class="nav-icon" aria-hidden="true">＋</span>Đăng ký</button>
+  <button class="nav-item" type="button" data-view="approve"><span class="nav-icon" aria-hidden="true">✓</span>Duyệt <span class="nav-count" id="mobilePending">0</span></button>
+  <button class="nav-item" type="button" data-view="attendance"><span class="nav-icon" aria-hidden="true">⌖</span>Chấm công</button>
+  <button class="nav-item" type="button" data-view="history"><span class="nav-icon" aria-hidden="true">◷</span>Lịch sử</button>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const STORE_KEY='tram-banh-mi-hr-v1';
+const STORE_CODE='TRAM-BM-CA-2026';
+const viewInfo={register:['Đăng ký ca làm','Sắp xếp ca làm linh hoạt cho đội ngũ cửa hàng.'],approve:['Duyệt đăng ký ca','Xem và xử lý các yêu cầu ca làm của nhân viên.'],attendance:['Chấm công QR + GPS','Ghi nhận thời gian làm việc tại cửa hàng.'],history:['Lịch sử chấm công','Tra cứu các lượt chấm công đã ghi nhận.']};
+const today=new Date();
+const localDate=date=>{const adjusted=new Date(date.getTime()-date.getTimezoneOffset()*60000);return adjusted.toISOString().slice(0,10)};
+const todayKey=localDate(today);
+const formatDate=value=>new Date(value+'T00:00:00').toLocaleDateString('vi-VN',{weekday:'short',day:'numeric',month:'short'});
+const dateTime=value=>new Date(value).toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+const escapeHtml=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const defaultData={shifts:[{id:'seed-1',name:'Lê Minh Anh',role:'Thu ngân',date:todayKey,start:'07:00',end:'13:00',status:'pending'},{id:'seed-2',name:'Trần Quốc Bảo',role:'Bếp',date:todayKey,start:'13:00',end:'19:00',status:'approved'}],attendance:[]};
+let data;
+try{data=JSON.parse(localStorage.getItem(STORE_KEY))||defaultData}catch{data=defaultData}
+if(!Array.isArray(data.shifts)||!Array.isArray(data.attendance))data=defaultData;
+let qrVerified=false;
+let gpsResult=null;
+let mediaStream=null;
+let scanTimer=null;
+let toastTimer=null;
+const $=id=>document.getElementById(id);
+
+function save(){localStorage.setItem(STORE_KEY,JSON.stringify(data))}
+function statusBadge(status){const labels={pending:'Chờ duyệt',approved:'Đã duyệt',rejected:'Đã từ chối',done:'Đã ghi nhận'};return `<span class="badge ${status}">${labels[status]||status}</span>`}
+function initials(name){return name.trim().split(/\s+/).slice(-2).map(part=>part[0]||'').join('').toUpperCase()}
+function shiftMarkup(shift,actions=false){return `<article class="shift-row"><div class="person"><span class="person-avatar">${escapeHtml(initials(shift.name))}</span><div><div class="person-name">${escapeHtml(shift.name)}</div><div class="person-role">${escapeHtml(shift.role)}</div></div></div><div><div class="shift-time">${escapeHtml(shift.start)} – ${escapeHtml(shift.end)}</div><div class="shift-date">${formatDate(shift.date)}</div></div>${statusBadge(shift.status)}${actions&&shift.status==='pending'?`<div class="row-actions"><button class="mini-button approve" data-action="approve" data-id="${escapeHtml(shift.id)}">Duyệt</button><button class="mini-button" data-action="reject" data-id="${escapeHtml(shift.id)}">Từ chối</button></div>`:''}</article>`}
+function render(){
+ const pending=data.shifts.filter(shift=>shift.status==='pending');
+ const approved=data.shifts.filter(shift=>shift.status==='approved');
+ const todayCount=data.attendance.filter(item=>item.date===todayKey).length;
+ $('pendingMetric').textContent=pending.length;$('approvedMetric').textContent=approved.length;$('attendanceMetric').textContent=todayCount;
+ $('pendingCount').textContent=pending.length;$('mobilePending').textContent=pending.length;
+ $('sidePending').textContent=`${pending.length} ca`;$('sideApproved').textContent=`${approved.length} ca`;
+ const sorted=[...data.shifts].sort((a,b)=>b.date.localeCompare(a.date)||a.start.localeCompare(b.start));
+ $('recentShifts').innerHTML=sorted.length?sorted.slice(0,5).map(shift=>shiftMarkup(shift)).join(''):'<div class="empty-state">Chưa có ca làm nào được đăng ký.</div>';
+ $('approvalList').innerHTML=pending.length?pending.map(shift=>shiftMarkup(shift,true)).join(''):'<div class="empty-state">Không có đăng ký nào đang chờ duyệt.</div>';
+ const filter=$('historyFilter').value;
+ const attendance=[...data.attendance].sort((a,b)=>b.time.localeCompare(a.time)).filter(item=>filter!=='today'||item.date===todayKey);
+ $('historyList').innerHTML=attendance.length?`<div class="history-list">${attendance.map(item=>`<article class="history-row"><div class="history-date">${escapeHtml(dateTime(item.time))}<span>${escapeHtml(item.name)}</span></div><div class="history-place">${escapeHtml(item.location)}</div>${statusBadge('done')}<div class="person-role">QR đã xác thực</div></article>`).join('')}</div>`:'<div class="empty-state">Chưa có lượt chấm công phù hợp.</div>';
+}
+function showToast(message){const toast=$('toast');toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),2600)}
+function setView(name){document.querySelectorAll('[data-view]').forEach(button=>button.classList.toggle('active',button.dataset.view===name));document.querySelectorAll('.view').forEach(section=>section.classList.toggle('active',section.id===`view-${name}`));$('pageTitle').textContent=viewInfo[name][0];$('pageSubtitle').textContent=viewInfo[name][1];window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>setView(button.dataset.view)));
+$('todayLabel').textContent=today.toLocaleDateString('vi-VN',{weekday:'long',day:'numeric',month:'long'});
+$('shiftDate').value=todayKey;$('shiftDate').min=todayKey;
+$('shiftForm').addEventListener('submit',event=>{
+ event.preventDefault();const form=new FormData(event.currentTarget);const start=form.get('shiftStart'),end=form.get('shiftEnd');
+ if(end<=start){showToast('Giờ kết thúc cần sau giờ bắt đầu.');return}
+ data.shifts.unshift({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),name:String(form.get('employeeName')).trim(),role:form.get('shiftRole'),date:form.get('shiftDate'),start,end,status:'pending'});save();render();event.currentTarget.reset();$('shiftDate').value=todayKey;$('shiftStart').value='07:00';$('shiftEnd').value='13:00';showToast('Đã gửi đăng ký ca để quản lý duyệt.');
+});
+$('approvalList').addEventListener('click',event=>{
+ const button=event.target.closest('[data-action]');if(!button)return;const shift=data.shifts.find(item=>item.id===button.dataset.id);if(!shift)return;
+ shift.status=button.dataset.action==='approve'?'approved':'rejected';save();render();showToast(shift.status==='approved'?'Đã duyệt ca làm.':'Đã từ chối đăng ký ca.');
+});
+function setQrVerified(){qrVerified=true;$('qrStatus').textContent='Mã QR đã được xác thực';$('qrMessage').textContent='Đã nhận diện mã cửa hàng hợp lệ.';$('gpsStep').textContent='✓';$('gpsStep').classList.add('done');updateCheckIn()}
+function updateCheckIn(){$('checkIn').disabled=!(qrVerified&&gpsResult)}
+function stopCamera(){if(scanTimer)clearInterval(scanTimer);scanTimer=null;if(mediaStream)mediaStream.getTracks().forEach(track=>track.stop());mediaStream=null}
+$('verifyCode').addEventListener('click',()=>{if($('qrInput').value.trim()===STORE_CODE){setQrVerified();showToast('Mã cửa hàng hợp lệ.')}else showToast('Mã QR không hợp lệ, vui lòng thử lại.')});
+$('startScan').addEventListener('click',async()=>{
+ if(!('BarcodeDetector'in window)||!navigator.mediaDevices?.getUserMedia){$('cameraNote').textContent='Thiết bị chưa hỗ trợ quét QR bằng camera. Bạn có thể nhập mã cửa hàng bên dưới.';showToast('Camera quét QR chưa được hỗ trợ trên trình duyệt này.');return}
+ try{stopCamera();mediaStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});const video=document.createElement('video');video.autoplay=true;video.playsInline=true;video.srcObject=mediaStream;$('scanBox').innerHTML='';$('scanBox').append(video);await video.play();const detector=new BarcodeDetector({formats:['qr_code']});$('cameraNote').textContent='Đưa mã QR cửa hàng vào giữa khung hình.';scanTimer=setInterval(async()=>{try{const codes=await detector.detect(video);if(codes.some(code=>code.rawValue===STORE_CODE)){stopCamera();$('scanBox').innerHTML='<div><div class="scan-mark" aria-hidden="true">✓</div><strong id="qrStatus">Mã QR đã được xác thực</strong><p id="qrMessage">Đã nhận diện mã cửa hàng hợp lệ.</p></div>';setQrVerified();showToast('Đã quét mã QR cửa hàng.')}}catch{}},500)}catch(error){stopCamera();$('cameraNote').textContent=error.name==='NotAllowedError'?'Bạn chưa cấp quyền camera. Hãy nhập mã cửa hàng để tiếp tục.':'Không thể mở camera trên thiết bị này.';showToast('Không mở được camera. Có thể nhập mã QR thay thế.')}
+});
+$('getLocation').addEventListener('click',()=>{
+ if(!navigator.geolocation){showToast('Trình duyệt không hỗ trợ định vị GPS.');return}
+ $('gpsStatus').textContent='Đang lấy vị trí…';navigator.geolocation.getCurrentPosition(position=>{gpsResult=position.coords;$('gpsStatus').textContent='Đã xác nhận vị trí GPS';$('gpsMessage').textContent=`Độ chính xác khoảng ${Math.round(position.coords.accuracy)} m`;$('gpsStep').textContent='✓';$('gpsStep').classList.add('done');updateCheckIn();showToast('Đã nhận vị trí GPS của thiết bị.')},error=>{gpsResult=null;$('gpsStatus').textContent='Chưa xác nhận vị trí';$('gpsMessage').textContent=error.code===1?'Bạn chưa cấp quyền định vị.':'Không lấy được vị trí, vui lòng thử lại.';updateCheckIn();showToast('Cần cấp quyền vị trí để chấm công.')},{enableHighAccuracy:true,timeout:12000,maximumAge:0});
+});
+$('checkIn').addEventListener('click',()=>{
+ if(!(qrVerified&&gpsResult))return;const time=new Date();data.attendance.unshift({id:String(Date.now()),name:$('employeeName').value.trim()||'Nhân viên cửa hàng',date:localDate(time),time:time.toISOString(),location:`GPS ±${Math.round(gpsResult.accuracy)} m`});save();render();gpsResult=null;qrVerified=false;$('qrInput').value='';$('qrStatus').textContent='Chưa xác thực mã QR';$('qrMessage').textContent='Quét mã QR tại cửa hàng hoặc nhập mã bên dưới.';$('gpsStatus').textContent='Chưa xác nhận vị trí';$('gpsMessage').textContent='Cần cho phép truy cập GPS của thiết bị.';$('gpsStep').textContent='2';$('gpsStep').classList.remove('done');$('scanBox').innerHTML='<div><div class="scan-mark" aria-hidden="true">⌗</div><strong id="qrStatus">Chưa xác thực mã QR</strong><p id="qrMessage">Quét mã QR tại cửa hàng hoặc nhập mã bên dưới.</p></div>';updateCheckIn();showToast('Đã ghi nhận chấm công thành công.');setView('history');
+});
+$('copyCode').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(STORE_CODE);showToast('Đã sao chép mã cửa hàng.')}catch{$('qrInput').value=STORE_CODE;$('qrInput').focus();showToast('Mã đã được điền vào ô xác nhận.')}});
+$('historyFilter').addEventListener('change',render);
+window.addEventListener('pagehide',stopCamera);
+render();
+</script>
+</body>
+</html>
